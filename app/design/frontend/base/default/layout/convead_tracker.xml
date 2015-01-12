@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<layout version="0.1.0">
+
+    <default>
+        <reference name="head">
+            <block type="convead_tracker/tracking" name="convead_tracking_head">
+                <action method="setTemplate" ifconfig="sales/convead_tracker/enabled">
+                    <template>convead_tracker/head.phtml</template>
+                </action>
+            </block>
+        </reference>
+    </default>
+
+    <catalog_product_view translate="label">
+        <reference name="head">
+            <block type="convead_tracker/tracking" name="convead_tracking_product" after="convead_tracking_head">
+                <action method="setTemplate" ifconfig="sales/convead_tracker/enabled">
+                    <template>convead_tracker/product-view.phtml</template>
+                </action>
+            </block>
+        </reference>
+    </catalog_product_view>
+
+</layout>

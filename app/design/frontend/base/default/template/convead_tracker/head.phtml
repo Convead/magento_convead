@@ -1,0 +1,50 @@
+<?php
+/* @var $this Convead_Tracker_Block_Tracking */
+?>
+<?php
+    $apiKey = $this->helper('convead_tracker')->getConveadApiKey();
+    $customerIsLoggedIn = Mage::getSingleton("customer/session")->isLoggedIn();
+
+    if ($customerIsLoggedIn) {
+        $customer = Mage::getSingleton('customer/session')->getCustomer();
+        $customerPhone = $this->getCustomerPhone();
+    }
+?>
+<?php if (Mage::helper('convead_tracker')->isEnabledConveadTracker() && $apiKey):?>
+    <script>
+        window.ConveadSettings = {
+            <?php if($customerIsLoggedIn): ?>
+                <?php if ($customer->getId()):?>
+                    visitor_uid: "<?php echo $customer->getId() ?>",
+                <?php endif;?>
+                visitor_info: {
+                    <?php if ($customer->getFirstname()):?>
+                        first_name: "<?php echo $customer->getFirstname() ?>",
+                    <?php endif;?>
+                    <?php if ($customer->getLastname()):?>
+                        last_name: "<?php echo $customer->getLastname() ?>",
+                    <?php endif;?>
+                    <?php if ($customer->getEmail()):?>
+                        email: "<?php echo $customer->getEmail() ?>",
+                    <?php endif;?>
+                    <?php if ($customerPhone):?>
+                        phone: "<?php echo $customerPhone ?>",
+                    <?php endif;?>
+                    <?php if ($customer->getDob()):?>
+                        date_of_birth: "<?php data('Y-m-d', strtotime($customer->getDob())) ?>",
+                    <?php endif;?>
+                    <?php if ($customer->getGender()):?>
+                        gender: "<?php  if ($customer->getGender() == 1): echo 'male';
+                                        elseif ($customer->getGender() == 2): echo 'female';
+                                        endif; ?>"
+                    <?php endif;?>
+                },
+            <?php endif; ?>
+            app_key: "<?php echo $apiKey ?>"
+        };
+
+        (function(w,d,c){w[c]=w[c]||function(){(w[c].q=w[c].q||[]).push(arguments)};var ts = (+new Date()/86400000|0)*86400;
+            var s = d.createElement('script');s.type = 'text/javascript';s.async = true;s.src = '//tracker.convead.io/widgets/'+ts+'/widget-<?php echo $apiKey ?>.js';
+            var x = d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s, x);})(window,document,'convead');
+    </script>
+<?php endif; ?>

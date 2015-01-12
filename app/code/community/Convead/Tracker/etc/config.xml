@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Convead_Tracker>
+            <version>1.0.0</version>
+        </Convead_Tracker>
+    </modules>
+    <global>
+        <blocks>
+            <convead_tracker>
+                <class>Convead_Tracker_Block</class>
+            </convead_tracker>
+        </blocks>
+        <helpers>
+            <convead_tracker>
+                <class>Convead_Tracker_Helper</class>
+            </convead_tracker>
+        </helpers>
+        <models>
+            <convead_tracker>
+                <class>Convead_Tracker_Model</class>
+            </convead_tracker>
+        </models>
+
+        <events>
+            <checkout_cart_product_add_after>
+                <observers>
+                    <convead_tracker>
+                        <class>convead_tracker/observer</class>
+                        <method>onCheckoutCartProductAddAfter</method>
+                    </convead_tracker>
+                </observers>
+            </checkout_cart_product_add_after>
+
+            <sales_quote_remove_item>
+                <observers>
+                    <convead_tracker>
+                        <class>convead_tracker/observer</class>
+                        <method>onSalesQuoteRemoveItem</method>
+                    </convead_tracker>
+                </observers>
+            </sales_quote_remove_item>
+
+            <checkout_cart_update_items_after>
+                <observers>
+                    <convead_tracker>
+                        <class>convead_tracker/observer</class>
+                        <method>onCheckoutCartUpdateItemsAfter</method>
+                    </convead_tracker>
+                </observers>
+            </checkout_cart_update_items_after>
+
+            <checkout_submit_all_after>
+                <observers>
+                    <convead_tracker>
+                        <class>convead_tracker/observer</class>
+                        <method>onCheckoutSubmitAllAfter</method>
+                    </convead_tracker>
+                </observers>
+            </checkout_submit_all_after>
+
+            <checkout_cart_save_after>
+                <observers>
+                    <convead_tracker>
+                        <class>convead_tracker/observer</class>
+                        <method>onCheckoutCartSaveAfter</method>
+                    </convead_tracker>
+                </observers>
+            </checkout_cart_save_after>
+
+            <controller_action_predispatch_checkout_cart_ajaxUpdate>
+                <observers>
+                    <convead_tracker>
+                        <class>convead_tracker/observer</class>
+                        <method>onControllerActionPredispatchCheckoutCartAjaxUpdate</method>
+                    </convead_tracker>
+                </observers>
+            </controller_action_predispatch_checkout_cart_ajaxUpdate>
+
+            <controller_action_postdispatch_checkout_cart_ajaxUpdate>
+                <observers>
+                    <convead_tracker>
+                        <class>convead_tracker/observer</class>
+                        <method>onControllerActionPostdispatchCheckoutCartAjaxUpdate</method>
+                    </convead_tracker>
+                </observers>
+            </controller_action_postdispatch_checkout_cart_ajaxUpdate>
+
+        </events>
+    </global>
+
+    <frontend>
+        <layout>
+            <updates>
+                <convead_tracker>
+                    <file>convead_tracker.xml</file>
+                </convead_tracker>
+            </updates>
+        </layout>
+    </frontend>
+
+    <adminhtml>
+        <translate>
+            <modules>
+                <Convead_Tracker>
+                    <files>
+                        <default>Convead_Tracker.csv</default>
+                    </files>
+                </Convead_Tracker>
+            </modules>
+        </translate>
+        <layout>
+            <updates>
+                <convead_tracker>
+                    <file>convead_tracker.xml</file>
+                </convead_tracker>
+            </updates>
+        </layout>
+    </adminhtml>
+
+</config>

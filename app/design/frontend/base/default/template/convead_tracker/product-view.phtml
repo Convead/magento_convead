@@ -1,0 +1,22 @@
+<?php
+/* @var $this Convead_Tracker_Block_Tracking */
+?>
+<?php
+    $product = Mage::registry('current_product');
+
+    $reg = '/(.*?)(.html).*/';
+    $productUrl = preg_replace($reg, '$1$2', $product->getProductUrl());
+?>
+
+<?php if (Mage::helper('convead_tracker')->isEnabledConveadTracker() && Mage::helper('convead_tracker')->getConveadApiKey()): ?>
+    <script type="text/javascript">
+        convead('event', 'view_product', {
+            product_id: "<?php echo $product->getId() ?>",
+            <?php if ($category = $product->getCategory()): ?>
+                category_id: "<?php echo $category->getId() ?>",
+            <?php endif; ?>
+            product_name: "<?php echo htmlspecialchars($product->getName()) ?>",
+            product_url: "<?php echo $productUrl ?>"
+        });
+    </script>
+<?php endif; ?>
