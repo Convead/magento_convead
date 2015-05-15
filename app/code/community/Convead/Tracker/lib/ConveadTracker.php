@@ -15,6 +15,7 @@ class ConveadTracker {
     private $url = false;
     private $domain = false;
     private $charset = 'utf-8';
+    private $debug = false;
 
     /**
      * 
@@ -40,7 +41,7 @@ class ConveadTracker {
      */
     public function __construct($api_key, $domain, $guest_uid, $visitor_uid = false, $visitor_info = false, $referrer = false, $url = false) {
         if (!class_exists('Browser')) {
-            require __DIR__ . '/Browser.php';
+            require 'Browser.php';
         }
 
         $this->browser = new Browser();
@@ -48,9 +49,6 @@ class ConveadTracker {
         $this->domain = $domain;
         $this->guest_uid = $guest_uid;
         $this->visitor_info = $visitor_info;
-        //if(!$visitor_uid)
-        //  $this->visitor_uid = "";
-        //else
         $this->visitor_uid = $visitor_uid;
         $this->referrer = $referrer;
         $this->url = $url;
@@ -71,12 +69,11 @@ class ConveadTracker {
         else
             $post["visitor_uid"] = "";
 
-        $this->referrer && $post["referrer"] = $this->referrer;
-        $this->visitor_info && $post["visitor_info"] = $this->visitor_info;
+        if ($this->referrer) $post["referrer"] = $this->referrer;
+        if (is_array($this->visitor_info)) $post["visitor_info"] = $this->visitor_info;
         if ($this->url) {
             $post["url"] = "http://" . $this->url;
             $post["host"] = $this->url;
-            //$post["path"] = $this->url;
         }
         return $post;
     }
@@ -88,16 +85,13 @@ class ConveadTracker {
      * @param type $product_url постоянный URL товара
      */
     public function eventProductView($product_id, $product_name = false, $product_url = false) {
-
         $post = $this->getDefaultPost();
         $post["type"] = "view_product";
         $post["properties"]["product_id"] = $product_id;
-        $product_name && $post["properties"]["product_name"] = $product_name;
-        $product_url && $post["properties"]["product_url"] = $product_url;
-        //error_reporting(E_ALL);
-        $post = $this->json_encode($post);
+        if ($product_name) $post["properties"]["product_name"] = $product_name;
+        if ($product_url) $post["properties"]["product_url"] = $product_url;
+        $post = $this->post_encode($post);
         $this->putLog($post);
-        //echo $post; die();
         if ($this->browser->get($this->api_page, $post) === true)
             return true;
         else
@@ -119,10 +113,10 @@ class ConveadTracker {
         $post["properties"]["product_id"] = $product_id;
         $post["properties"]["qnt"] = $qnt;
         $post["properties"]["price"] = $price;
-        $product_name && $post["properties"]["product_name"] = $product_name;
-        $product_url && $post["properties"]["product_url"] = $product_url;
+        if ($product_name) $post["properties"]["product_name"] = $product_name;
+        if ($product_url) $post["properties"]["product_url"] = $product_url;
 
-        $post = $this->json_encode($post);
+        $post = $this->post_encode($post);
         $this->putLog($post);
         if ($this->browser->get($this->api_page, $post) === true)
             return true;
@@ -143,10 +137,10 @@ class ConveadTracker {
         $post["type"] = "remove_from_cart";
         $post["properties"]["product_id"] = $product_id;
         $post["properties"]["qnt"] = $qnt;
-        $product_name && $post["properties"]["product_name"] = $product_name;
-        $product_url && $post["properties"]["product_url"] = $product_url;
+        if ($product_name) $post["properties"]["product_name"] = $product_name;
+        if ($product_url) $post["properties"]["product_url"] = $product_url;
 
-        $post = $this->json_encode($post);
+        $post = $this->post_encode($post);
         $this->putLog($post);
         if ($this->browser->get($this->api_page, $post) === true)
             return true;
@@ -171,15 +165,14 @@ class ConveadTracker {
         $properties = array();
         $properties["order_id"] = $order_id;
 
-        $revenue && $properties["revenue"] = $revenue;
-        $order_array && $properties["items"] = $order_array;
+        if ($revenue) $properties["revenue"] = $revenue;
+        if (is_array($order_array)) $properties["items"] = $order_array;
 
         $post["properties"] = $properties;
-        //unset($post["domain"]);
         unset($post["url"]);
         unset($post["host"]);
         unset($post["path"]);
-        $post = $this->json_encode($post);
+        $post = $this->post_encode($post);
         $this->putLog($post);
 
         if ($this->browser->get($this->api_page, $post) === true)
@@ -206,7 +199,7 @@ class ConveadTracker {
 
         $post["properties"] = $properties;
 
-        $post = $this->json_encode($post);
+        $post = $this->post_encode($post);
         $this->putLog($post);
 
         if ($this->browser->get($this->api_page, $post) === true)
@@ -222,7 +215,7 @@ class ConveadTracker {
         $post["url"] = "http://" . $this->url . $url;
         $post["path"] = $url;
 
-        $post = $this->json_encode($post);
+        $post = $this->post_encode($post);
 
         $this->putLog($post);
 
@@ -233,10 +226,28 @@ class ConveadTracker {
     }
 
     private function putLog($message) {
-        return true;
-        $message = "\n" . date("Y.m.d H:i:s") . $message;
-        $filename = dirname(__FILE__) . "/log.log";
+        if (!$this->debug) return true;
+        $message = date("Y.m.d H:i:s") . " - " . $message . "\n";
+        $filename = dirname(__FILE__) . "/log.txt";
         file_put_contents($filename, $message, FILE_APPEND);
+    }
+
+    private function post_encode($post) {
+        $ret_post = array(
+            'app_key' => $post['app_key'],
+            'visitor_uid' => $post['visitor_uid'],
+            'guest_uid' => $post['guest_uid'],
+            'data' => $this->json_encode($post)
+          );
+        return $this->build_http_query($ret_post);
+    }
+  
+    private function build_http_query($query) {
+        $query_array = array();
+        foreach( $query as $key => $key_value ){
+            $query_array[] = urlencode( $key ) . '=' . urlencode( $key_value );
+        }
+        return implode('&', $query_array);
     }
 
     private function json_encode($text) {

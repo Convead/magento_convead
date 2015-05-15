@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Класс дл¤ работы с post запросами
+ * Класс для работы с post запросами
  */
 class Browser {
 
@@ -56,12 +56,27 @@ class Browser {
         return $result;
     }
 
+    public function isUAAbandoned($user_agent){
+        if(!$user_agent)
+            return true;
+        $re = "/bot|crawl(er|ing)|google|yandex|rambler|yahoo|bingpreview|alexa|facebookexternalhit|bitrix/i"; 
+        
+        $matches = array(); 
+        preg_match($re, $user_agent, $matches);
+
+        if(count($matches) > 0)
+            return true;
+        else
+            return false;
+    }
+
     public function get($url, $post = false) {
+        if($this->isUAAbandoned($_SERVER['HTTP_USER_AGENT']))
+            return true;
+
         $curl = curl_init($url);
 
-
         curl_setopt($curl, CURLOPT_FAILONERROR, true);
-        //curl_setopt($curl, CURLOPT_PROXY, '127.0.0.1:8888');
 
         if ($post) {
             curl_setopt($curl, CURLOPT_POST, 1);
@@ -71,7 +86,6 @@ class Browser {
         } else {
             curl_setopt($curl, CURLOPT_POST, false);
         }
-
 
         curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/json; charset=utf-8", "Accept:application/json, text/javascript, */*; q=0.01"));
 
