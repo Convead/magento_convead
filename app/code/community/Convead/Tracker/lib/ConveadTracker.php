@@ -228,7 +228,7 @@ class ConveadTracker {
     private function putLog($message) {
         if (!$this->debug) return true;
         $message = date("Y.m.d H:i:s") . " - " . $message . "\n";
-        $filename = dirname(__FILE__) . "/log.txt";
+        $filename = dirname(__FILE__) . "/debug.log";
         file_put_contents($filename, $message, FILE_APPEND);
     }
 
