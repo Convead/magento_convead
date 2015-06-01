@@ -70,7 +70,7 @@ class ConveadTracker {
             $post["visitor_uid"] = "";
 
         if ($this->referrer) $post["referrer"] = $this->referrer;
-        if (is_array($this->visitor_info)) $post["visitor_info"] = $this->visitor_info;
+        if (is_array($this->visitor_info) and count($this->visitor_info)) $post["visitor_info"] = $this->visitor_info;
         if ($this->url) {
             $post["url"] = "http://" . $this->url;
             $post["host"] = $this->url;
