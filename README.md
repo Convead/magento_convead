@@ -8,7 +8,7 @@ See English readme [below](#system-requirements).
 Установка модуля в магазин
 --------------------------
 
-1. [Скачайте архив модуля](https://s3.amazonaws.com/convead/public/plugins/magento/Convead-1.0.0.tgz) из нашего репозитория.
+1. [Скачайте архив модуля](https://s3.amazonaws.com/convead/public/plugins/magento/Convead-1.1.0.tgz) из нашего репозитория.
 2. Установите модуль через Magento Connect Manager или через FTP.
 
   **Установка через Magento Connect Manager:**
@@ -34,7 +34,7 @@ All Magento versions starting with 1.5 and later are supported.
 Installing module
 -----------------
 
-1. [Download module archive](https://s3.amazonaws.com/convead/public/plugins/magento/Convead-1.0.0.tgz) from our repository.
+1. [Download module archive](https://s3.amazonaws.com/convead/public/plugins/magento/Convead-1.1.0.tgz) from our repository.
 2. Install module with Magento Connect Manager or via FTP.
 
   **Installing with Magento Connect Manager:**
