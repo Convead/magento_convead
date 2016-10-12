@@ -2,12 +2,19 @@
 class Convead_Tracker_Model_Api
 {
     protected $_convead;
+    protected $_api;
 
     public function __construct()
     {
         require_once 'Convead'.DS.'Tracker'.DS.'lib'.DS.'ConveadTracker.php';
 
         $this->_initConvead();
+    }
+
+    protected function _initApi()
+    {
+        $key = Mage::helper('convead_tracker')->getConveadApiKey();
+        $this->_api = new ConveadApi($key);
     }
 
     protected function _initConvead($order = false)
@@ -101,6 +108,29 @@ class Convead_Tracker_Model_Api
         }
 
         $this->_convead->eventOrder($order_id, $revenue, $order_array);
+
+        return $this;
+    }
+
+    public function apiOrderDelete($order)
+    {
+        if (!($api = $this->_initApi())) return false;
+ 
+        $order_id = $order->getIncrementId();
+
+        $this->_api->orderDelete($order_id);
+
+        return $this;
+    }
+
+    public function apiOrderSetState($order)
+    {
+        if (!($api = $this->_initApi())) return false;
+ 
+        $order_id = $order->getIncrementId();
+        $state = $order->getState();
+
+        $this->_api->orderSetState($order_id, $state);
 
         return $this;
     }
