@@ -112,25 +112,17 @@ class Convead_Tracker_Model_Api
         return $this;
     }
 
-    public function apiOrderDelete($order)
-    {
-        if (!($api = $this->_initApi())) return false;
- 
-        $order_id = $order->getIncrementId();
-
-        $this->_api->orderDelete($order_id);
-
-        return $this;
-    }
-
     public function apiOrderSetState($order)
     {
-        if (!($api = $this->_initApi())) return false;
+        $this->_initApi();
  
         $order_id = $order->getIncrementId();
         $state = $order->getState();
 
-        $this->_api->orderSetState($order_id, $state);
+        if ($state == 'canceled') $this->_api->orderDelete($order_id);
+        else {
+            if ($state != '') $this->_api->orderSetState($order_id, $state);
+        }
 
         return $this;
     }

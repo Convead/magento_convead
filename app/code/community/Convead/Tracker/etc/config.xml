@@ -32,15 +32,6 @@
                 </observers>
             </sales_order_save_after>
 
-            <order_cancel_after>
-                <observers>
-                    <convead_tracker>
-                        <class>convead_tracker/observer</class>
-                        <method>onAdminOrderCancelAfter</method>
-                    </convead_tracker>
-                </observers>
-            </order_cancel_after>
-
             <checkout_cart_product_add_after>
                 <observers>
                     <convead_tracker>
