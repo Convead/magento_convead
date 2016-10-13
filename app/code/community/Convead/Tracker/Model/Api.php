@@ -121,7 +121,7 @@ class Convead_Tracker_Model_Api
 
         if ($state == 'canceled') $this->_api->orderDelete($order_id);
         else {
-            if ($state != '') $this->_api->orderSetState($order_id, $state);
+            if ($state != '' && $state != 'new') $this->_api->orderSetState($order_id, $state);
         }
 
         return $this;
