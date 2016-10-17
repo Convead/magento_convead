@@ -126,4 +126,15 @@ class Convead_Tracker_Model_Api
 
         return $this;
     }
+    
+    public function apiOrderDelete($order)
+    {
+        $this->_initApi();
+ 
+        $order_id = $order->getIncrementId();
+        
+        $this->_api->orderDelete($order_id);
+
+        return $this;
+    }
 }
