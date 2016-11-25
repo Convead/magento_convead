@@ -33,10 +33,10 @@ class Convead_Tracker_Model_Api
                 }
             }
 
-            $this->_convead = new ConveadTracker($key, $_SERVER['HTTP_HOST'], $_COOKIE['convead_guest_uid'],
+            $this->_convead = new ConveadTracker($key, $_SERVER['HTTP_HOST'], (isset($_COOKIE['convead_guest_uid']) ? $_COOKIE['convead_guest_uid'] : false),
                 (Mage::getSingleton("customer/session")->isLoggedIn() ? $customer->getId() : false), $visitorInfo);
         } else {
-            $this->_convead = new ConveadTracker($key, $_SERVER['HTTP_HOST'], $_COOKIE['convead_guest_uid'],
+            $this->_convead = new ConveadTracker($key, $_SERVER['HTTP_HOST'], (isset($_COOKIE['convead_guest_uid']) ? $_COOKIE['convead_guest_uid'] : false),
                 (Mage::getSingleton("customer/session")->isLoggedIn() ? $customer->getId() : false));
         }
     }
