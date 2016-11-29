@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Convead_Tracker>
-            <version>1.1.5</version>
+            <version>1.2.0</version>
         </Convead_Tracker>
     </modules>
     <global>
@@ -23,6 +23,15 @@
         </models>
 
         <events>
+            <sales_order_save_after>
+                <observers>
+                    <convead_tracker>
+                        <class>convead_tracker/observer</class>
+                        <method>onSalesOrderSaveAfter</method>
+                    </convead_tracker>
+                </observers>
+            </sales_order_save_after>
+
             <checkout_cart_product_add_after>
                 <observers>
                     <convead_tracker>

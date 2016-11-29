@@ -1,6 +1,40 @@
 <?php
 class Convead_Tracker_Model_Observer
 {
+    public function onSalesOrderSaveAfter($observer)
+    {
+        if (!Mage::helper('convead_tracker')->isEnabledConveadTracker() || !Mage::helper('convead_tracker')->getConveadApiKey()) {
+            return $this;
+        }
+
+        $order = $observer->getOrder();
+
+        try {
+            Mage::getModel('convead_tracker/api')->apiOrderSetState($order);
+        } catch (Exception $e) {
+            Mage::log($e->getMessage());
+        }
+
+        return $this;
+    }
+
+    public function onAdminOrderCancelAfter($observer)
+    {
+        if (!Mage::helper('convead_tracker')->isEnabledConveadTracker() || !Mage::helper('convead_tracker')->getConveadApiKey()) {
+            return $this;
+        }
+
+        $order = $observer->getOrder();
+
+        try {
+            Mage::getModel('convead_tracker/api')->apiOrderDelete($order);
+        } catch (Exception $e) {
+            Mage::log($e->getMessage());
+        }
+
+        return $this;
+    }
+
     public function onCheckoutCartProductAddAfter($observer)
     {
         if (!Mage::helper('convead_tracker')->isEnabledConveadTracker() || !Mage::helper('convead_tracker')->getConveadApiKey()) {
