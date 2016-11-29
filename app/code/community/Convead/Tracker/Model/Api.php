@@ -20,6 +20,7 @@ class Convead_Tracker_Model_Api
     {
         $key = Mage::helper('convead_tracker')->getConveadApiKey();
         $customer = Mage::getSingleton('customer/session')->getCustomer();
+        $guest_uid = (isset($_COOKIE['convead_guest_uid']) ? $_COOKIE['convead_guest_uid'] : false);
 
         if ($order) {
 
@@ -39,10 +40,10 @@ class Convead_Tracker_Model_Api
                 }
             }
 
-            $this->_tracker = new ConveadTracker($key, $_SERVER['HTTP_HOST'], $_COOKIE['convead_guest_uid'],
+            $this->_tracker = new ConveadTracker($key, $_SERVER['HTTP_HOST'], $guest_uid,
                 (Mage::getSingleton("customer/session")->isLoggedIn() ? $customer->getId() : false), $visitorInfo);
         } else {
-            $this->_tracker = new ConveadTracker($key, $_SERVER['HTTP_HOST'], $_COOKIE['convead_guest_uid'],
+            $this->_tracker = new ConveadTracker($key, $_SERVER['HTTP_HOST'], $guest_uid,
                 (Mage::getSingleton("customer/session")->isLoggedIn() ? $customer->getId() : false));
         }
     }
