@@ -31,7 +31,7 @@
                         phone: "<?php echo $customerPhone ?>",
                     <?php endif;?>
                     <?php if ($customer->getDob()):?>
-                        date_of_birth: "<?php data('Y-m-d', strtotime($customer->getDob())) ?>",
+                        date_of_birth: "<?php date('Y-m-d', strtotime($customer->getDob())) ?>",
                     <?php endif;?>
                     <?php if ($customer->getGender()):?>
                         gender: "<?php  if ($customer->getGender() == 1): echo 'male';
