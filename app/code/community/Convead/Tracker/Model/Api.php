@@ -5,7 +5,7 @@ class Convead_Tracker_Model_Api
 
     public function __construct()
     {
-        require_once 'Convead'.DS.'Tracker'.DS.'lib'.DS.'ConveadTracker.php';
+        require_once BP.DS.'app'.DS.'code'.DS.'community'.DS.'Convead'.DS.'Tracker'.DS.'lib'.DS.'ConveadTracker.php';
 
         $this->_initConvead();
     }
