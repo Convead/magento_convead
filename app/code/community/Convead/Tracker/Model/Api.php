@@ -64,6 +64,9 @@ class Convead_Tracker_Model_Api
 
     public function apiRemoveFromCart($item)
     {
+        # do not send anonymous events
+        if ($this->_tracker->generated_uid == false) return $this;
+
         $product_id = $item->getProductId();
         $qnt = $item->getQty();
         $product_name = $item->getName();
